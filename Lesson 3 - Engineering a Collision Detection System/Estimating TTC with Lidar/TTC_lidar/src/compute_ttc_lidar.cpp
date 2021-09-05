@@ -15,16 +15,39 @@ void computeTTCLidar(std::vector<LidarPoint> &lidarPointsPrev,
     double dT = 0.1;        // time between two measurements in seconds
     double laneWidth = 4.0; // assumed width of the ego lane
 
+    // Lidar points within the minimum width will be considered
+    // for (auto lPrev = lidarPointsPrev.begin(); lPrev != lidarPointsPrev.end(); ++lPrev) {
+    //     if (lPrev->y >=-2.0 && lPrev->y <=2.0) {
+    //         continue;
+    //     } else {
+    //         lidarPointsPrev.erase(lPrev);
+    //     }
+    // }
+
+    // for (auto lCurr = lidarPointsCurr.begin(); lCurr != lidarPointsCurr.end(); ++lCurr) {
+    //     if (lCurr->y >=-2 && lCurr->y <=2.0) {
+    //         continue;
+    //     } else {
+    //         lidarPointsCurr.erase(lCurr);
+    //     }
+    // }
+
     // find closest distance to Lidar points within ego lane
     double minXPrev = 1e9, minXCurr = 1e9;
     for (auto it = lidarPointsPrev.begin(); it != lidarPointsPrev.end(); ++it)
     {
-        minXPrev = minXPrev > it->x ? it->x : minXPrev;
+        if (std::abs(it->y) <= laneWidth / 2.0) {
+             minXPrev = minXPrev > it->x ? it->x : minXPrev;
+        }
+       
     }
 
     for (auto it = lidarPointsCurr.begin(); it != lidarPointsCurr.end(); ++it)
     {
-        minXCurr = minXCurr > it->x ? it->x : minXCurr;
+        if (std::abs(it->y) <= laneWidth / 2.0) {
+            minXCurr = minXCurr > it->x ? it->x : minXCurr;
+        }
+        
     }
 
     // compute TTC from both measurements
