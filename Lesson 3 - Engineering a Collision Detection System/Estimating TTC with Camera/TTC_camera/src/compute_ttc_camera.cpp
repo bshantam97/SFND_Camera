@@ -35,6 +35,7 @@ void computeTTCCamera(std::vector<cv::KeyPoint> &kptsPrev, std::vector<cv::KeyPo
             cv::KeyPoint kpInnerPrev = kptsPrev.at(it2->queryIdx);
 
             // compute distances and distance ratios
+            //cv::KeyPoint pt->Coordinates of Keypoints
             double distCurr = cv::norm(kpOuterCurr.pt - kpInnerCurr.pt);
             double distPrev = cv::norm(kpOuterPrev.pt - kpInnerPrev.pt);
 
@@ -53,12 +54,25 @@ void computeTTCCamera(std::vector<cv::KeyPoint> &kptsPrev, std::vector<cv::KeyPo
         TTC = NAN;
         return;
     }
-
+    
     // compute camera-based TTC from distance ratios
-    double meanDistRatio = std::accumulate(distRatios.begin(), distRatios.end(), 0.0) / distRatios.size();
+    // double meanDistRatio = std::accumulate(distRatios.begin(), distRatios.end(), 0.0) / distRatios.size();
+
+    // Compute the median distance ratio's
+    // First case is if we have 
+    double medianDistRatio;
+    std::sort(distRatios.begin(), distRatios.end());
+    if (distRatios.size() % 2 == 1) {
+        int index = std::floor((distRatios.size() / 2));
+        medianDistRatio = distRatios[index];
+    } else {
+        int idx1 = (distRatios.size() / 2);
+        int idx2 = idx1 - 1;
+        medianDistRatio = (distRatios[idx1] + distRatios[idx2]) / 2;
+    }
 
     double dT = 1 / frameRate;
-    TTC = -dT / (1 - meanDistRatio);
+    TTC = -dT / (1 - medianDistRatio);
 
     // TODO: STUDENT TASK (replacement for meanDistRatio)
 }
