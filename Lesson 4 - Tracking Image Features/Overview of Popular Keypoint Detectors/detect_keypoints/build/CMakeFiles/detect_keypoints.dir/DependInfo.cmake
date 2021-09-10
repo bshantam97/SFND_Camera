@@ -4,13 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/stephen/Work/Camera-Course/C3.3_exercise_solution/src/detect_keypoints.cpp" "/home/stephen/Work/Camera-Course/C3.3_exercise_solution/build/CMakeFiles/detect_keypoints.dir/src/detect_keypoints.cpp.o"
+  "/home/shantam97/SFND_Camera/Lesson 4 - Tracking Image Features/Overview of Popular Keypoint Detectors/detect_keypoints/src/detect_keypoints.cpp" "/home/shantam97/SFND_Camera/Lesson 4 - Tracking Image Features/Overview of Popular Keypoint Detectors/detect_keypoints/build/CMakeFiles/detect_keypoints.dir/src/detect_keypoints.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/local/include/opencv4"
+  "/usr/include/opencv4"
   )
 
 # Targets to which this target links.
