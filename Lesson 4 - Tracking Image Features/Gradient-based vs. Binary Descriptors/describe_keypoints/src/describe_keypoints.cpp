@@ -6,7 +6,7 @@
 #include <opencv2/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/xfeatures2d/nonfree.hpp>
-
+#include <chrono>
 using namespace std;
 
 void descKeypoints1()
@@ -44,7 +44,32 @@ void descKeypoints1()
     // time for both steps and compare both BRISK and SIFT
     // with regard to processing speed and the number and 
     // visual appearance of keypoints.
+    cv::Ptr<cv::SiftFeatureDetector> siftDetector = cv::SIFT::create();
+    std::vector<cv::KeyPoint> siftKeyPoints;
 
+    // The SIFT Feature Detector
+    auto siftStart = std::chrono::steady_clock::now();
+    siftDetector->detect(imgGray,siftKeyPoints);
+    auto siftEnd = std::chrono::steady_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(siftEnd - siftStart);
+    std::cout << "The KeyPoints detected by SIFT are: " << siftKeyPoints.size() << "in: " << elapsedTime.count() << "ms" << std::endl;
+
+    // The Sift Feature Descriptor
+    cv::Ptr<cv::DescriptorExtractor> siftDescriptor = cv::SIFT::create();
+    std::vector<cv::KeyPoint> siftKeypointDescriptor;
+
+    auto siftDescriptorStart = std::chrono::steady_clock::now();
+    siftDescriptor->detect(img, siftKeypointDescriptor);
+    auto siftDescriptorEnd = std::chrono::steady_clock::now();
+    auto elapsedDescriptor = std::chrono::duration_cast<std::chrono::milliseconds>(siftDescriptorEnd-siftDescriptorStart);
+    std::cout << "SIFT Descriptor in: " << elapsedDescriptor.count() << " ms " << std::endl;
+    
+    cv::Mat visSiftImage = img.clone();
+    cv::drawKeypoints(img, siftKeyPoints, visSiftImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+    string windowName1 = "SIFT Results";
+    cv::namedWindow(windowName1, 1);
+    cv::imshow(windowName1, visSiftImage);
+    cv::waitKey(0);
 }
 
 int main()
